@@ -1,5 +1,4 @@
 import { AWSCredentialsSchema, AWSCredentials } from './schemas';
-import { z } from 'zod';
 
 const CREDENTIALS_KEY = 'aws_credentials';
 
@@ -54,7 +53,7 @@ export class CredentialsService {
   /**
    * Validate credentials using Zod schema
    */
-  validate(credentials: unknown): z.SafeParseReturnType<unknown, AWSCredentials> {
+  validate(credentials: unknown) {
     return AWSCredentialsSchema.safeParse(credentials);
   }
 }
