@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MessageThread } from '@/components/MessageThread';
 import { InputField } from '@/components/InputField';
 import { CredentialsPanel } from '@/components/CredentialsPanel';
@@ -11,17 +11,15 @@ import { DEFAULT_REGION, MODEL, PROMPT } from '@/lib/utils';
 import { CredentialsBanner } from '@/components/CredentialsBanner';
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [credentials, setCredentials] = useState<AWSCredentials | null>();
-
-  useEffect(() => {
-    setMounted(true);
-    const credentials = credentialsService.retrieve();
-    setCredentials(credentials);
-  }, []);
+  const [credentials, setCredentials] = useState<AWSCredentials | null>(() => {
+    if (typeof window !== 'undefined') {
+      return credentialsService.retrieve();
+    }
+    return null;
+  });
 
   const handleSubmit = async (query: string) => {
     if (!credentials) {
@@ -116,14 +114,6 @@ export default function Home() {
       throw new Error('Failed to save credentials');
     }
   };
-
-  if (!mounted) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-background">
-        <div className="text-muted">Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-screen bg-background">
