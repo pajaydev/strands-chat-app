@@ -24,7 +24,7 @@ export function InputField({ onSubmit, disabled, placeholder = 'Ask a question..
   const isSubmitDisabled = disabled || !input.trim();
 
   return (
-    <form onSubmit={handleSubmit} className="border-t p-6" style={{ borderColor: '#e5dcc8', backgroundColor: '#f5f1e8' }}>
+    <form onSubmit={handleSubmit} className="border-t border-border p-6 bg-background">
       <div className="flex gap-3 max-w-4xl mx-auto">
         <input
           type="text"
@@ -32,21 +32,17 @@ export function InputField({ onSubmit, disabled, placeholder = 'Ask a question..
           onChange={(e) => setInput(e.target.value)}
           disabled={disabled}
           placeholder={placeholder}
-          className="flex-1 w-full border rounded-xl px-5 py-3 focus:outline-none font-light transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            borderColor: '#e5dcc8',
-            backgroundColor: '#fff',
-            color: '#1a1a1a'
-          }}
+          className="flex-1 w-full border border-border rounded-xl px-5 py-3 
+                     focus:outline-none transition-all 
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     bg-surface text-foreground"
         />
         <button
           type="submit"
           disabled={isSubmitDisabled}
-          className="px-8 py-3 rounded-xl disabled:cursor-not-allowed transition-all font-light disabled:opacity-40 hover:opacity-70"
-          style={{
-            backgroundColor: '#d4a574',
-            color: '#fff'
-          }}
+          className="px-8 py-3 rounded-xl transition-all 
+                     disabled:cursor-not-allowed disabled:opacity-40
+                     bg-accent text-white hover:bg-accent-hover"
         >
           Send
         </button>

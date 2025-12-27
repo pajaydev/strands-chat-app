@@ -15,41 +15,35 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const scrollTimeoutRef = useRef<NodeJS.Timeout>(undefined);
 
-  // Detect user scrolling
   const handleScroll = () => {
     if (!containerRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
 
-    // If user scrolls away from bottom, mark as user scrolling
     if (!isAtBottom) {
       setIsUserScrolling(true);
     } else {
       setIsUserScrolling(false);
     }
 
-    // Clear existing timeout
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
 
-    // Reset user scrolling flag after 1 second of no scrolling
     scrollTimeoutRef.current = setTimeout(() => {
       setIsUserScrolling(false);
     }, 1000);
   };
 
-  // Auto-scroll to bottom when new messages arrive (unless user is scrolling)
   useEffect(() => {
     if (!isUserScrolling && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isUserScrolling]);
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (scrollTimeoutRef.current) {
@@ -62,19 +56,14 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto p-8"
-      style={{ backgroundColor: '#f5f1e8' }}
+      className="flex-1 overflow-y-auto p-8 bg-background"
     >
       <div className="max-w-4xl mx-auto">
         {messages.length === 0 && !isLoading && (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <p className="text-lg font-light mb-2" style={{ color: '#1a1a1a' }}>
-                Start a conversation
-              </p>
-              <p className="text-sm font-light" style={{ color: '#8b7355' }}>
-                Ask me anything
-              </p>
+              <p className="text-lg mb-2 text-foreground">Start a conversation</p>
+              <p className="text-sm text-muted">Ask me anything</p>
             </div>
           </div>
         )}
@@ -94,11 +83,11 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
 
         {isLoading && (
           <div className="flex justify-start mb-6">
-            <div className="rounded-2xl p-5 border" style={{ backgroundColor: '#fff', borderColor: '#e5dcc8' }}>
+            <div className="rounded-2xl p-5 border bg-surface border-border">
               <div className="flex space-x-1.5">
-                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: '#d4a574', animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: '#d4a574', animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: '#d4a574', animationDelay: '300ms' }}></div>
+                <div className="w-2 h-2 rounded-full animate-bounce bg-accent" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 rounded-full animate-bounce bg-accent" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 rounded-full animate-bounce bg-accent" style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           </div>

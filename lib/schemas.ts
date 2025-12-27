@@ -1,15 +1,14 @@
 import { z } from 'zod';
 
-// AWS Credentials Schema
 export const AWSCredentialsSchema = z.object({
   accessKeyId: z.string().min(1, 'Access Key ID is required'),
   secretAccessKey: z.string().min(1, 'Secret Access Key is required'),
-  region: z.string().min(1, 'Region is required'),
+  sessionToken: z.string().optional(),
+  region: z.string().optional(),
 });
 
 export type AWSCredentials = z.infer<typeof AWSCredentialsSchema>;
 
-// Message Schema
 export const MessageSchema = z.object({
   id: z.string().uuid(),
   type: z.enum(['user', 'assistant']),

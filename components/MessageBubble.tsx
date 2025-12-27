@@ -18,17 +18,13 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-6`}>
       <div className={`max-w-[80%] ${isUser ? 'ml-auto' : 'mr-auto'}`}>
-        <div className="text-xs mb-2 font-light" style={{ color: '#8b7355' }}>
+        <div className="text-xs mb-2 text-muted">
           <span>{isUser ? 'You' : 'Assistant'}</span>
           <span className="ml-2 opacity-60">{formatTime(message.timestamp)}</span>
         </div>
         <div 
-          className="rounded-2xl p-5 leading-relaxed font-light"
-          style={{
-            backgroundColor: isUser ? '#e5dcc8' : '#fff',
-            color: '#1a1a1a',
-            border: isUser ? 'none' : '1px solid #e5dcc8'
-          }}
+          className={`rounded-2xl p-5 leading-relaxed text-foreground
+            ${isUser ? 'bg-accent' : 'bg-surface border border-border'}`}
         >
           {message.content}
         </div>
