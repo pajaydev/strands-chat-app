@@ -6,6 +6,8 @@ Format your response as follows:
 1. First, provide your detailed answer to the user's question
 2. Then, add a separator line: ---FOLLOW_UP_QUESTIONS---
 3. Finally, list exactly 4 follow-up questions, one per line
+4. Do NOT repeat the original question.
+5. Do NOT ask yes/no questions, follow-up questions should encourage deeper exploration.
 
 Example format:
 [Your detailed answer here]

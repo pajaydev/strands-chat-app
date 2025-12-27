@@ -69,9 +69,8 @@ export function CredentialsPanel({ isOpen, onClose, onSubmit }: CredentialsPanel
       />
       <div className="fixed right-0 top-0 h-full w-96 shadow-2xl z-50 transform transition-transform border-l bg-background border-border">
         <div className="flex flex-col h-full">
-          {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-border">
-            <h2 className="text-lg text-foreground">AWS Credentials</h2>
+            <h2 className="text-lg text-foreground">Configure AWS Credentials</h2>
             <button
               onClick={onClose}
               className="hover:opacity-70 transition-opacity text-muted"
@@ -84,8 +83,6 @@ export function CredentialsPanel({ isOpen, onClose, onSubmit }: CredentialsPanel
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex-1 p-6 overflow-y-auto">
-            <p className="text-sm mb-6 text-muted">Enter your AWS credentials.</p>
-
             {submitError && (
               <div className="mb-4 p-3 border rounded-lg text-sm bg-error-bg border-error-border text-error">
                 {submitError}

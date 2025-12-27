@@ -63,7 +63,7 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <p className="text-lg mb-2 text-foreground">Start a conversation</p>
-              <p className="text-sm text-muted">Ask me anything</p>
+              <p className="text-sm text-muted">Ask me anything, I’ll show you what to ask next.</p>
             </div>
           </div>
         )}
