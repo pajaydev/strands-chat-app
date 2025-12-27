@@ -1,10 +1,10 @@
 # Strands Chat App
 
-A Next.js chat interface that suggests intelligent follow-up questions using AWS Bedrock and Strands SDK.
+A Next.js chat interface that suggests intelligent follow-up questions using [Strands SDK]((https://strandsagents.com/latest/)).
 
 ## Features
 
-- 🤖 AI-powered chat using AWS Bedrock and Strands agent
+- 🤖 AI-powered chat using [AWS Bedrock](https://aws.amazon.com/bedrock) and [Strands agent](https://strandsagents.com/latest/)
 - 💡 Intelligent follow-up question suggestions (4 per response)
 - 🎨 Dark theme UI inspired by v0.app
 - 🔒 Secure credential storage (sessionStorage)
@@ -68,13 +68,9 @@ A Next.js chat interface that suggests intelligent follow-up questions using AWS
 - All credential inputs are validated with Zod schemas
 - Credentials are never logged or persisted to disk
 
-## Environment Variables
+## Issues
 
-No environment variables required. Users provide their own AWS credentials through the UI.
-
-## License
-
-MIT
+Free feel to create an issue if you face any issues
 
 ## Contributing
 

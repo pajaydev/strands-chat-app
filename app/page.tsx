@@ -117,8 +117,7 @@ export default function Home() {
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Sidebar */}
-      <div className="w-64 border-r flex flex-col bg-background border-border">
+      <div className="hidden md:flex w-64 border-r flex-col bg-background border-border">
         <div className="p-4 border-b border-border">
           <h1 className="text-lg font-semibold text-foreground">Strands Chat App</h1>
         </div>
@@ -134,7 +133,7 @@ export default function Home() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"
               />
             </svg>
             <span>{credentials ? 'Credentials configured' : 'Configure AWS credentials'}</span>
@@ -144,6 +143,24 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-background">
+          <h1 className="text-lg font-semibold text-foreground">Strands Chat App</h1>
+          <button
+            onClick={() => setIsPanelOpen(true)}
+            className="p-2 rounded-lg transition-colors text-foreground hover:bg-surface"
+            aria-label="Configure credentials"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"
+              />
+            </svg>
+          </button>
+        </div>
+
         {!credentials && <CredentialsBanner setIsPanelOpen={setIsPanelOpen} />}
         <div className="flex-1 flex flex-col overflow-hidden">
           <MessageThread messages={messages} isLoading={isLoading} onQuestionClick={handleQuestionClick} />
