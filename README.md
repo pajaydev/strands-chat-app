@@ -1,6 +1,14 @@
 # Strands Chat App
 
-A Next.js chat interface that suggests intelligent follow-up questions using [Strands SDK]((https://strandsagents.com/latest/)).
+A Next.js chat interface that suggests intelligent follow-up questions using [Strands SDK](https://strandsagents.com/latest/).
+
+<div align="center">
+  <img src="public/strands-demo.png" alt="Strands Chat Demo" width="800"/>
+</div>
+
+## 🚀 Live Demo
+
+Try it out: **[strands-chat-app.vercel.app](https://strands-chat-app.vercel.app)**
 
 ## Features
 
