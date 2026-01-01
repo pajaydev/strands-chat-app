@@ -1,0 +1,1 @@
+export type StreamingStatus = 'idle' | 'loading' | 'streaming' | 'complete';

@@ -4,14 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 import { Message } from '@/lib/schemas';
 import { MessageBubble } from './MessageBubble';
 import { QuestionCards } from './QuestionCards';
+import { StreamingStatus } from '@/lib/types';
 
 interface MessageThreadProps {
   messages: Message[];
   isLoading: boolean;
+  streamingStatus?: StreamingStatus;
   onQuestionClick: (question: string) => void;
 }
 
-export function MessageThread({ messages, isLoading, onQuestionClick }: MessageThreadProps) {
+export function MessageThread({ messages, isLoading, streamingStatus = 'idle', onQuestionClick }: MessageThreadProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
@@ -51,7 +53,7 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
       }
     };
   }, []);
-
+  
   return (
     <div
       ref={containerRef}
@@ -70,7 +72,7 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
 
         {messages.map((message) => (
           <div key={message.id}>
-            <MessageBubble message={message} />
+            <MessageBubble message={message} streamingStatus={streamingStatus}/>
             {message.type === 'assistant' && message.followUpQuestions && (
               <QuestionCards
                 questions={message.followUpQuestions}
@@ -80,19 +82,6 @@ export function MessageThread({ messages, isLoading, onQuestionClick }: MessageT
             )}
           </div>
         ))}
-
-        {isLoading && (
-          <div className="flex justify-start mb-6">
-            <div className="rounded-2xl p-5 border bg-surface border-border">
-              <div className="flex space-x-1.5">
-                <div className="w-2 h-2 rounded-full animate-bounce bg-accent" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 rounded-full animate-bounce bg-accent" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 rounded-full animate-bounce bg-accent" style={{ animationDelay: '300ms' }}></div>
-              </div>
-            </div>
-          </div>
-        )}
-
         <div ref={messagesEndRef} />
       </div>
     </div>
