@@ -9,6 +9,13 @@ export const AWSCredentialsSchema = z.object({
 
 export type AWSCredentials = z.infer<typeof AWSCredentialsSchema>;
 
+// Model Configuration Schema
+export const ModelConfigSchema = z.object({
+  modelId: z.string().min(1, 'Model ID is required'),
+});
+
+export type ModelConfig = z.infer<typeof ModelConfigSchema>;
+
 export const MessageSchema = z.object({
   id: z.string().uuid(),
   type: z.enum(['user', 'assistant']),

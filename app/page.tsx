@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { MessageThread } from '@/components/MessageThread';
 import { InputField } from '@/components/InputField';
 import { CredentialsPanel } from '@/components/CredentialsPanel';
+import { ModelPanel } from '@/components/ModelPanel';
 import { Message, AWSCredentials } from '@/lib/schemas';
 import { credentialsService } from '@/lib/credentials-service';
+import { modelService } from '@/lib/model-service';
 import { Agent, BedrockModel } from '@strands-agents/sdk';
-import { DEFAULT_REGION, MODEL, PROMPT } from '@/lib/utils';
+import { DEFAULT_REGION, getModelDisplayName, MODEL, PROMPT } from '@/lib/utils';
 import { CredentialsBanner } from '@/components/CredentialsBanner';
 import { StreamingStatus } from '@/lib/types';
 
@@ -16,6 +18,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('idle');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isModelPanelOpen, setIsModelPanelOpen] = useState(false);
+  const [currentModelId, setCurrentModelId] = useState(() => modelService.getCurrentModelId());
   const [credentials, setCredentials] = useState<AWSCredentials | null>(() => {
     if (typeof window !== 'undefined') {
       return credentialsService.retrieve();
@@ -54,7 +58,7 @@ export default function Home() {
     try {
       const { region, accessKeyId, secretAccessKey, sessionToken } = credentials;
       const bedrockModel = new BedrockModel({
-        modelId: MODEL,
+        modelId: currentModelId,
         region: region || DEFAULT_REGION,
         clientConfig: {
           credentials: {
@@ -74,8 +78,6 @@ export default function Home() {
 
       // Iterate through streaming events
       for await (const event of agent.stream(query)) {
-        console.log('Stream event type:', event.type);
-
         switch (event.type) {
           case 'modelContentBlockStartEvent':
             if (event.start?.type === 'toolUseStart') {
@@ -178,13 +180,17 @@ export default function Home() {
     }
   };
 
+  const handleModelChange = (modelId: string) => {
+    setCurrentModelId(modelId);
+  };
+
   return (
     <div className="flex h-screen bg-background">
       <div className="hidden md:flex w-64 border-r flex-col bg-background border-border">
         <div className="p-4 border-b border-border">
           <h1 className="text-lg font-semibold text-foreground">Strands Chat App</h1>
         </div>
-        <div className="p-3 border-t border-border">
+        <div className="p-3 border-t border-border space-y-2">
           <button
             onClick={() => setIsPanelOpen(true)}
             className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors
@@ -201,27 +207,61 @@ export default function Home() {
             </svg>
             <span>{credentials ? 'Credentials configured' : 'Configure AWS credentials'}</span>
           </button>
+          
+          <button
+            onClick={() => setIsModelPanelOpen(true)}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors
+                       text-foreground hover:bg-border bg-surface"
+          >
+            <div className="flex flex-col items-start">
+              <span>Model Selection</span>
+              <span className="text-xs text-muted mt-0.5">
+                {getModelDisplayName(currentModelId)}
+              </span>
+            </div>
+          </button>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-background">
-          <h1 className="text-lg font-semibold text-foreground">Strands Chat App</h1>
-          <button
-            onClick={() => setIsPanelOpen(true)}
-            className="p-2 rounded-lg transition-colors text-foreground hover:bg-surface"
-            aria-label="Configure credentials"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"
-              />
-            </svg>
-          </button>
+          <div className="flex flex-col">
+            <h1 className="text-lg font-semibold text-foreground">Strands Chat App</h1>
+            <span className="text-xs text-muted">
+              {getModelDisplayName(currentModelId)}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsModelPanelOpen(true)}
+              className="p-2 rounded-lg transition-colors text-foreground hover:bg-surface"
+              aria-label="Select model"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={() => setIsPanelOpen(true)}
+              className="p-2 rounded-lg transition-colors text-foreground hover:bg-surface"
+              aria-label="Configure credentials"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {!credentials && <CredentialsBanner setIsPanelOpen={setIsPanelOpen} />}
@@ -238,6 +278,15 @@ export default function Home() {
 
       {/* Credentials Panel */}
       <CredentialsPanel isOpen={isPanelOpen} onClose={() => setIsPanelOpen(false)} onSubmit={handleCredentialsSubmit} />
+      
+      {/* Model Panel */}
+      <ModelPanel 
+        isOpen={isModelPanelOpen} 
+        onClose={() => setIsModelPanelOpen(false)} 
+        credentials={credentials}
+        currentModelId={currentModelId}
+        onModelChange={handleModelChange}
+      />
     </div>
   );
 }
